@@ -2,6 +2,7 @@ package com.hf.controller;
 
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,6 +20,7 @@ import java.util.UUID;
 public class SendMessageController {
 
     @Autowired
+    @Qualifier("createRabbitTemplate")
     private RabbitTemplate rabbitTemplate;
 
     /**
@@ -30,7 +32,7 @@ public class SendMessageController {
         Map<String, String> map = new HashMap<>();
         map.put("1", "newBee");
         map.put("2", "haha");
-        rabbitTemplate.convertAndSend("TestDirectExchange", "TestDirect", map);
+        rabbitTemplate.convertAndSend("TestDirectExchange1", "TestDirect", map);
         return HttpStatus.OK.getReasonPhrase();
     }
 
@@ -43,7 +45,7 @@ public class SendMessageController {
         manMap.put("messageId", messageId);
         manMap.put("messageData", messageData);
         manMap.put("createTime", createTime);
-        rabbitTemplate.convertAndSend("testTopicExchange", "topic.man", manMap);
+        rabbitTemplate.convertAndSend("testTopicExchange1", "topic.man", manMap);
         return "ok";
     }
 

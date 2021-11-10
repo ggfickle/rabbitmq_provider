@@ -8,7 +8,13 @@ spring:
 
 #    rabbitmq服务器配置
   rabbitmq:
-    host: 127.0.0.1
+    host: 8.136.41.79
     port: 5672
     username: admin
     password: admin
+
+    # 在springboot2.3以后的版本中，下面这个配置属于删除状态，推荐使用后一种配置方式
+#    publisher-confirms: true
+    publisher-confirm-type: correlated
+    # 下面这个配置，表示接收mq返回的确认消息
+    publisher-returns: true
