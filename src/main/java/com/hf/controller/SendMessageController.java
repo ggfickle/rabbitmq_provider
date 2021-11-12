@@ -32,7 +32,7 @@ public class SendMessageController {
         Map<String, String> map = new HashMap<>();
         map.put("1", "newBee");
         map.put("2", "haha");
-        rabbitTemplate.convertAndSend("TestDirectExchange1", "TestDirect", map);
+        rabbitTemplate.convertAndSend("TestDirectExchange", "TestDirect", map);
         return HttpStatus.OK.getReasonPhrase();
     }
 
@@ -45,7 +45,7 @@ public class SendMessageController {
         manMap.put("messageId", messageId);
         manMap.put("messageData", messageData);
         manMap.put("createTime", createTime);
-        rabbitTemplate.convertAndSend("testTopicExchange1", "topic.man", manMap);
+        rabbitTemplate.convertAndSend("testTopicExchange", "topic.man", manMap);
         return "ok";
     }
 

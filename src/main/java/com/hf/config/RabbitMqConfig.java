@@ -1,9 +1,7 @@
 package com.hf.config;
 
-import org.springframework.amqp.core.ReturnedMessage;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
-import org.springframework.amqp.rabbit.connection.CorrelationData;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,6 +29,8 @@ public class RabbitMqConfig {
         CachingConnectionFactory cachingConnectionFactory = new CachingConnectionFactory(rabbitmqHost);
         cachingConnectionFactory.setUsername(rabbitmqUserName);
         cachingConnectionFactory.setPassword(rabbitmqPassword);
+        cachingConnectionFactory.setPublisherConfirmType(CachingConnectionFactory.ConfirmType.CORRELATED);
+        cachingConnectionFactory.setPublisherReturns(true);
         return cachingConnectionFactory;
     }
 
