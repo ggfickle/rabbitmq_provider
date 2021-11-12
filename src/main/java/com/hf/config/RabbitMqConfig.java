@@ -4,6 +4,7 @@ import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,14 +24,20 @@ public class RabbitMqConfig {
     @Value("${spring.rabbitmq.password}")
     private String rabbitmqPassword;
 
+    @Value("${spring.rabbitmq.publisher-confirm-type}")
+    private CachingConnectionFactory.ConfirmType confirmType;
+
+    @Value("${spring.rabbitmq.publisher-returns}")
+    private boolean publisherReturns;
+
     //配置连接工厂
     @Bean
     public CachingConnectionFactory cachingConnectionFactory() {
         CachingConnectionFactory cachingConnectionFactory = new CachingConnectionFactory(rabbitmqHost);
         cachingConnectionFactory.setUsername(rabbitmqUserName);
         cachingConnectionFactory.setPassword(rabbitmqPassword);
-        cachingConnectionFactory.setPublisherConfirmType(CachingConnectionFactory.ConfirmType.CORRELATED);
-        cachingConnectionFactory.setPublisherReturns(true);
+        cachingConnectionFactory.setPublisherConfirmType(confirmType);
+        cachingConnectionFactory.setPublisherReturns(publisherReturns);
         return cachingConnectionFactory;
     }
 

@@ -45,7 +45,7 @@ public class SendMessageController {
         manMap.put("messageId", messageId);
         manMap.put("messageData", messageData);
         manMap.put("createTime", createTime);
-        rabbitTemplate.convertAndSend("testTopicExchange", "topic.man", manMap);
+        rabbitTemplate.convertAndSend("lonelyDirectExchange", "topic.man", manMap);
         return "ok";
     }
 
