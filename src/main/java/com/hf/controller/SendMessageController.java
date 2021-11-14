@@ -1,5 +1,8 @@
 package com.hf.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.hf.pojo.UserVO;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -29,27 +32,27 @@ public class SendMessageController {
      */
     @PostMapping("/send1")
     public String sendMessage() {
-        Map<String, String> map = new HashMap<>();
-        map.put("1", "newBee");
-        map.put("2", "haha");
-        rabbitTemplate.convertAndSend("TestDirectExchange", "TestDirect", map);
+        UserVO userVO = new UserVO();
+        userVO.setName("zhangsan");
+        userVO.setId(1L);
+        userVO.setAge(12);
+        String result = JSON.toJSONString(userVO);
+        rabbitTemplate.convertAndSend("TestDirectExchange", "TestDirect", result);
         return HttpStatus.OK.getReasonPhrase();
     }
 
-    @GetMapping("/sendTopicMessage1")
+    @PostMapping("/sendTopicMessage1")
     public String sendTopicMessage1() {
-        String messageId = String.valueOf(UUID.randomUUID());
-        String messageData = "message: M A N ";
-        String createTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-        Map<String, Object> manMap = new HashMap<>();
-        manMap.put("messageId", messageId);
-        manMap.put("messageData", messageData);
-        manMap.put("createTime", createTime);
-        rabbitTemplate.convertAndSend("lonelyDirectExchange", "topic.man", manMap);
+        UserVO userVO = new UserVO();
+        userVO.setName("李四");
+        userVO.setId(9L);
+        userVO.setAge(15);
+        String result = JSON.toJSONString(userVO);
+        rabbitTemplate.convertAndSend("testTopicExchange", "topic.man", result);
         return "ok";
     }
 
-    @GetMapping("/sendTopicMessage2")
+    @PostMapping("/sendTopicMessage2")
     public String sendTopicMessage2() {
         String messageId = String.valueOf(UUID.randomUUID());
         String messageData = "message: woman is all ";
