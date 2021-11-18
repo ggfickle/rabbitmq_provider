@@ -26,6 +26,8 @@ public class SendMessageController {
     @Qualifier("createRabbitTemplate")
     private RabbitTemplate rabbitTemplate;
 
+
+
     /**
      * 使用消息队列发送消息
      * @return
