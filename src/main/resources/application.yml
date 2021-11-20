@@ -20,8 +20,14 @@ spring:
     publisher-returns: true
   cloud:
     nacos:
-      config:
-        server-addr: 8.136.41.79:8848
       discovery:
         server-addr: 8.136.41.79:8848
+
+    sentinel:
+      transport:
+        dashboard: 8.136.41.79:8858 #配置Sentinel dashboard地址
+        port: 8719
+        clientIp: localhost
+      eager: true
+
 
