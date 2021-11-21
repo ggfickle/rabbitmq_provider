@@ -29,10 +29,19 @@ public class ConfigController {
         return "1";
     }
 
+    /**
+     * 此处block方法缺少上面的get方法的a参数，所以限流无法进入此方法
+     * @param e
+     * @return
+     */
     public String deal_testHotKey(BlockException e) {
         return "------deal_testHotKey,o(╥﹏╥)o" + e.getLocalizedMessage();  //sentinel系统默认的提示：Blocked by Sentinel (flow limiting)
     }
 
+    /**
+     * 缺少参数a，熔断降级不会跑到该方法上
+     * @return
+     */
     public String test1() {
         return "------deal_testHotKey,o(╥﹏╥)o";  //sentinel系统默认的提示：fallback by Sentinel (flow limiting)
     }

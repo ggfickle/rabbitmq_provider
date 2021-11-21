@@ -15,14 +15,19 @@ import org.springframework.stereotype.Component;
 public class PrintLogAspect {
 
     /**
-     * 定义切点
+     * 定义注解切点
      */
     @Pointcut(value = "@annotation(com.hf.annotation.PrintLog)")
     private void printLogPointCut() {
-
     }
 
-    @Around(value = "printLogPointCut()")
+    /**
+     * 定义方法级别的切点
+     */
+    @Pointcut(value = "execution(* com.hf..*(..))")
+    private void allPointCut() {}
+
+    @Around(value = "allPointCut()")
     public Object handlerPrintLog(ProceedingJoinPoint joinPoint) {
         // 获取方法的名称
         String methodName = joinPoint.getSignature().getName();
