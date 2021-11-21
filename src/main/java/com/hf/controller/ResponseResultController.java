@@ -2,6 +2,7 @@ package com.hf.controller;
 
 import com.alibaba.csp.sentinel.annotation.SentinelResource;
 import com.alibaba.csp.sentinel.slots.block.BlockException;
+import com.hf.annotation.PrintLog;
 import com.hf.annotation.ResponseResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,7 +10,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/response")
@@ -29,23 +32,38 @@ public class ResponseResultController {
         return findAllUser;
     }
 
+    @PrintLog
+    @ResponseResult
     @GetMapping("/test2")
     @SentinelResource(value = "test2", blockHandler = "testBlock", fallback = "testFallback")
-    public String test2(Integer number, Integer a) {
+    public Map<String, Object> test2(Integer number, Integer a) {
         if (number == 1) {
             throw new RuntimeException("运行时异常");
         }
-        return "info";
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("result", "info");
+        return result;
     }
 
-    public String testBlock(Integer number, Integer a, BlockException e){
-//        throw new NullPointerException();
+    /**
+     * 此时ResponseResult注解不生效
+     * @param number
+     * @param a
+     * @param e
+     * @return
+     */
+    @ResponseResult
+    public Map<String, Object> testBlock(Integer number, Integer a, BlockException e){
         log.error(e.getLocalizedMessage());
-        return "当前参与活动的人数太多，请稍后再试";
+        throw new RuntimeException("人数众多");
+//        return "当前参与活动的人数太多，请稍后再试";
     }
 
-    public String testFallback(Integer number, Integer a, Throwable throwable) {
+    @ResponseResult
+    public Map<String, Object> testFallback(Integer number, Integer a, Throwable throwable) {
         log.error(throwable.getLocalizedMessage());
-        return "服务器开小差了，请稍后再试。";
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("result", "服务器开小差了，请稍后再试。");
+        return result;
     }
 }

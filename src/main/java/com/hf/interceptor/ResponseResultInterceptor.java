@@ -37,6 +37,7 @@ public class ResponseResultInterceptor implements HandlerInterceptor {
             final Method method = handlerMethod.getMethod();
             // 判断是否在类对象上添加了ResponseResult注解
             if (aClass.isAnnotationPresent(ResponseResult.class)) {
+                // 在请求中设置需要进行响应包装的属性标志，在下面的ResponseBodyAdvice增强中进行处理
                 request.setAttribute(RESPONSE_ANNOTATION, aClass.getAnnotation(ResponseResult.class));
             } else if (method.isAnnotationPresent(ResponseResult.class)) {
                 request.setAttribute(RESPONSE_ANNOTATION, method.getAnnotation(ResponseResult.class));
