@@ -48,9 +48,9 @@ public class IpUtils {
         String chinaz = "http://ip.chinaz.com";
 
         StringBuilder inputLine = new StringBuilder();
-        String read = "";
-        URL url = null;
-        HttpURLConnection urlConnection = null;
+        String read;
+        URL url;
+        HttpURLConnection urlConnection;
         BufferedReader in = null;
         try {
             url = new URL(chinaz);
