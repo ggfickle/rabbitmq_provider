@@ -6,7 +6,7 @@ spring:
   application:
     name: rabiit_provider
 
-#    rabbitmq服务器配置
+  #    rabbitmq服务器配置
   rabbitmq:
     host: 8.136.41.79
     port: 5672
@@ -14,7 +14,7 @@ spring:
     password: admin
 
     # 在springboot2.3以后的版本中，下面这个配置属于删除状态，推荐使用后一种配置方式
-#    publisher-confirms: true
+    #    publisher-confirms: true
     publisher-confirm-type: correlated
     # 下面这个配置，表示接收mq返回的确认消息
     publisher-returns: true
@@ -22,12 +22,39 @@ spring:
     nacos:
       discovery:
         server-addr: 8.136.41.79:8848
+      config:
+        server-addr: 8.136.41.79:8848
+        file-extension: yaml
 
-#本地启动sentinel-dashboard.jar包可以正常限流   远程docker中不行
+    #本地启动sentinel-dashboard.jar包可以正常限流   远程docker中不行
     sentinel:
       transport:
-        dashboard: localhost:8858 #配置Sentinel dashboard地址
+        dashboard: 8.136.41.79:8858 #配置Sentinel dashboard地址
         port: 8719
-        clientIp: localhost
+        clientIp: 192.168.0.166
       eager: true
+      datasource:
+        ds:
+          nacos:
+            serverAddr: 8.136.41.79:8848
+            dataId: ${spring.application.name}-SENTINEL.json
+            groupId: DEFAULT_GROUP
+            username: nacos
+            password: nacos
+            rule-type: flow
+            data-type: json
+      log:
+        dir: ./log/sentinel/
 
+#   nacos的配置内容
+#  [
+#    {
+#      "resource": "test2",
+#      "limitApp": "default",
+#      "grade": "1",
+#      "count": "1",
+#      "strategy": "0",
+#      "controlBehavior": "0",
+#      "clusterMode": false
+#    }
+#  ]

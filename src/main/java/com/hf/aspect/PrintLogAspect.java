@@ -27,7 +27,7 @@ public class PrintLogAspect {
     @Pointcut(value = "execution(* com.hf..*(..))")
     private void allPointCut() {}
 
-    @Around(value = "allPointCut()")
+    @Around(value = "printLogPointCut()")
     public Object handlerPrintLog(ProceedingJoinPoint joinPoint) {
         // 获取方法的名称
         String methodName = joinPoint.getSignature().getName();

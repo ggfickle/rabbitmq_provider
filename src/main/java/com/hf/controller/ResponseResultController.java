@@ -4,7 +4,9 @@ import com.alibaba.csp.sentinel.annotation.SentinelResource;
 import com.alibaba.csp.sentinel.slots.block.BlockException;
 import com.hf.annotation.PrintLog;
 import com.hf.annotation.ResponseResult;
+import com.hf.util.IpUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,6 +19,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/response")
 @Slf4j
+@RefreshScope
 public class ResponseResultController {
 
     @ResponseResult
@@ -36,7 +39,14 @@ public class ResponseResultController {
     @ResponseResult
     @GetMapping("/test2")
     @SentinelResource(value = "test2", blockHandler = "testBlock", fallback = "testFallback")
-    public Map<String, Object> test2(Integer number, Integer a) {
+    public Map<String, Object> test2(Integer number) {
+        try {
+            log.info("IP1:{}", IpUtils.getInterIP1());
+            log.info("IP2:{}", IpUtils.getInterIP2());
+            log.info("IPV4:{}", IpUtils.getOutIPV4());
+        } catch (Exception e) {
+            log.error("获取id异常，{}", e.getLocalizedMessage());
+        }
         if (number == 1) {
             throw new RuntimeException("运行时异常");
         }
@@ -47,21 +57,23 @@ public class ResponseResultController {
 
     /**
      * 此时ResponseResult注解不生效
+     *
      * @param number
-     * @param a
      * @param e
      * @return
      */
     @ResponseResult
-    public Map<String, Object> testBlock(Integer number, Integer a, BlockException e){
-        log.error(e.getLocalizedMessage());
-        throw new RuntimeException("人数众多");
-//        return "当前参与活动的人数太多，请稍后再试";
+    public Map<String, Object> testBlock(Integer number, BlockException e) {
+        log.error(number + e.getLocalizedMessage());
+//        throw new RuntimeException("人数众多");
+        Map<String, Object> result = new HashMap<>();
+        result.put("result", "当前参与活动的人数太多，请稍后再试");
+        return result;
     }
 
     @ResponseResult
-    public Map<String, Object> testFallback(Integer number, Integer a, Throwable throwable) {
-        log.error(throwable.getLocalizedMessage());
+    public Map<String, Object> testFallback(Integer number, Throwable throwable) {
+        log.error(number + throwable.getLocalizedMessage());
         HashMap<String, Object> result = new HashMap<>();
         result.put("result", "服务器开小差了，请稍后再试。");
         return result;
