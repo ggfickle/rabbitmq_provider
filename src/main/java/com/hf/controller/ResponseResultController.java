@@ -2,6 +2,7 @@ package com.hf.controller;
 
 import com.alibaba.csp.sentinel.annotation.SentinelResource;
 import com.alibaba.csp.sentinel.slots.block.BlockException;
+import com.alibaba.nacos.api.naming.NamingService;
 import com.hf.annotation.PrintLog;
 import com.hf.annotation.ResponseResult;
 import com.hf.util.IpUtils;
