@@ -22,9 +22,6 @@ spring:
     nacos:
       discovery:
         server-addr: 8.136.41.79:8848
-      config:
-        server-addr: 8.136.41.79:8848
-        file-extension: yaml
 
     #本地启动sentinel-dashboard.jar包可以正常限流   远程docker中不行
     sentinel:

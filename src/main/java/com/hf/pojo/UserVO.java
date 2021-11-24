@@ -1,8 +1,11 @@
 package com.hf.pojo;
 
+import com.hf.base.ErrorCode;
+import com.hf.controller.ConfigController;
 import lombok.Data;
 import lombok.ToString;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
@@ -20,6 +23,7 @@ public class UserVO implements Serializable {
     * @Param id
     * @Return
     **/
+    @NotNull(message = "id不可为空")
     private Long id;
 
     /**
@@ -28,6 +32,7 @@ public class UserVO implements Serializable {
     * @Param
     * @Return
     **/
+    @NotNull(message = "名称不可为空", groups = {ErrorCode.class})
     private String name;
 
     /**
