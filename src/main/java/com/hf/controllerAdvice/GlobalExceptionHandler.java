@@ -105,17 +105,10 @@ public class GlobalExceptionHandler {
         printExceptionLogs(e);
         // 单个参数校验异常
         Set<ConstraintViolation<?>> sets = e.getConstraintViolations();
-        if (CollectionUtils.isNotEmpty(sets)) {
-            StringBuilder sb = new StringBuilder();
-            sets.forEach(error -> {
-                if (error instanceof FieldError) {
-                    sb.append(((FieldError) error).getField()).append(":");
-                }
-                sb.append(error.getMessage()).append(";");
-            });
-            return ResponseResult.fail(HttpStatus.BAD_REQUEST.value(), sb.substring(0, sb.length() - 1));
-        }
-        return ResponseResult.fail(SystemErrorCode.INVALID_ARGUMENT);
+        List<String> collect = sets.stream()
+                .map(ConstraintViolation::getMessage)
+                .collect(Collectors.toList());
+        return ResponseResult.fail(HttpStatus.BAD_REQUEST.value(), JSONObject.toJSONString(collect));
     }
 
     @ExceptionHandler(Exception.class)
@@ -131,19 +124,5 @@ public class GlobalExceptionHandler {
         //接口路径
         String requestURI = request.getRequestURI();
         log.error("调用接口:{}时发生了异常:{}", requestURI, e.getMessage());
-    }
-
-    private String getValidExceptionMsg(List<ObjectError> errors) {
-        if (CollectionUtils.isNotEmpty(errors)) {
-            StringBuilder sb = new StringBuilder();
-            errors.forEach(error -> {
-                if (error instanceof FieldError) {
-                    sb.append(((FieldError) error).getField()).append(":");
-                }
-                sb.append(error.getDefaultMessage()).append(";");
-            });
-            return sb.substring(0, sb.length() - 1);
-        }
-        return null;
     }
 }
