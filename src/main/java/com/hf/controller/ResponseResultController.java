@@ -66,7 +66,6 @@ public class ResponseResultController {
     @ResponseResult
     public Map<String, Object> testBlock(Integer number, BlockException e) {
         log.error(number + e.getLocalizedMessage());
-//        throw new RuntimeException("人数众多");
         Map<String, Object> result = new HashMap<>();
         result.put("result", "当前参与活动的人数太多，请稍后再试");
         return result;

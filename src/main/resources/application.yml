@@ -41,7 +41,9 @@ spring:
             rule-type: flow
             data-type: json
       log:
-        dir: ./log/sentinel/
+        dir: ./logs/sentinel/
+logging:
+  config: classpath:log4j2-produce.xml
 
 #   nacos的配置内容
 #  [

@@ -58,5 +58,7 @@ public class ConfigController {
     @PostMapping("/get1")
     public void get1(@RequestBody @Validated({ErrorCode.class, Default.class}) UserVO userVO) {
         log.info(JSONObject.toJSONString(userVO));
+        UserVO userVO1 = null;
+        System.out.println(userVO1.getAge());
     }
 }
